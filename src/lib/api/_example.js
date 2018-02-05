@@ -1,4 +1,4 @@
-const url = `/api/adds`;
+const url = `budamunt.herokuapp.com/api/adds`;
 import fetch from 'isomorphic-fetch';
 
 import token from '../../auth/token';

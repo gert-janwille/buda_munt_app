@@ -1,20 +1,18 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+  heading: {
+    fontFamily: 'Poppins',
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#62AFA4'
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  center: {
+    textAlign: 'center'
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#3e3e3e',
-    marginBottom: 5,
-  },
+  tabButton:{
+    width: 62,
+    height: 60,
+    marginBottom: 2,
+  }
 });
