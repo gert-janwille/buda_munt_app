@@ -1,15 +1,12 @@
-const url = `budamunt.herokuapp.com/api/users`;
-import fetch from 'isomorphic-fetch';
-
+const url = `https://budamunt.herokuapp.com/api/users`;
 import buildBody from '../buildBody';
-import token from '../auth/token';
 
 export default {
-  read: email => {
+  read: (email, token) => {
     const method = `GET`;
     const headers = new Headers({
       'Content-Type': `application/json`,
-      authorization: token.get()
+      authorization: token
     });
 
     return fetch(`${url}?email=${email}`, {method, headers, mode: `cors`})

@@ -3,7 +3,8 @@ import {View, Text, Image} from 'react-native';
 import {TabNavigator, StackNavigator} from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen'
-import Login from '../screens/login/Login'
+import ScanScreen from '../screens/ScanScreen'
+import Login from '../screens/Login'
 
 import mainStyle from '../styles/mainStyle'
 
@@ -19,6 +20,24 @@ const otherScreen = () => (
   </View>
 );
 
+export const ScanScreens = StackNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        title: "Home",
+        header: null
+      },
+    },
+    Scan: {
+      screen: ScanScreen,
+      navigationOptions: {
+        title: "Scan"
+      }
+    }
+  }
+);
+
 export const AppScreens = TabNavigator(
   {
     Profiel: {
@@ -32,7 +51,7 @@ export const AppScreens = TabNavigator(
     },
 
     Home: {
-      screen: HomeScreen,
+      screen: ScanScreens,
       navigationOptions: ({navigation}) => ({
         title: "",
         showLabel: false,

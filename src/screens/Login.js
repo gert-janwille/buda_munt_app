@@ -3,8 +3,8 @@ import {inject, observer} from 'mobx-react/native'
 
 import {View, Text, TextInput, Button, Image} from 'react-native';
 
-import formStyle from '../../styles/formStyle'
-import mainStyle from '../../styles/mainStyle'
+import formStyle from '../styles/formStyle'
+import mainStyle from '../styles/mainStyle'
 
 const Login = ({navigation, changeInput, login}) => {
 
@@ -41,7 +41,7 @@ const Login = ({navigation, changeInput, login}) => {
 
         </View>
 
-        <Image style={formStyle.backgroundImage} source={require('../../assets/img/main-buda-community.png')}/>
+        <Image style={formStyle.backgroundImage} source={require('../assets/img/main-buda-community.png')}/>
 
       </View>
 

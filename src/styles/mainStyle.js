@@ -11,8 +11,9 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   tabButton:{
-    width: 62,
-    height: 60,
-    marginBottom: 2,
-  }
+    width: 42,
+    height: 40,
+    marginTop: 10,
+  },
+  
 });
