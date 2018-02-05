@@ -15,6 +15,14 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
 
+  amountContainer: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height-200,
+    marginTop: 25,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
   qrContainer: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height-200,
@@ -50,6 +58,36 @@ export default StyleSheet.create({
     borderColor: '#fff',
     width: Dimensions.get('window').width-100,
 
+  },
+
+  inputContainer: {
+    marginTop: 50,
+    marginBottom: 20,
+    width: Dimensions.get('window').width-100,
+    backgroundColor: 'red',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  amountText: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: '200',
+    alignSelf: 'flex-start',
+  },
+  bda: {
+    flex: 1,
+    fontSize:40,
+    color: 'white',
+  },
+  amount:{
+    flex: 2,
+    borderRadius:10,
+    borderWidth: 0.5,
+    borderColor: '#fff',
+    height: 80,
+    color: 'white',
+    fontSize: 40,
   },
   camera: {
    flex: 0,

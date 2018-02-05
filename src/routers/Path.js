@@ -32,7 +32,9 @@ export const ScanScreens = StackNavigator(
     Scan: {
       screen: ScanScreen,
       navigationOptions: {
-        title: "Scan"
+        title: "Scan",
+        headerStyle: { backgroundColor: '#72B7AD' },
+        headerTitleStyle: { color: 'white' },
       }
     }
   }

@@ -18,7 +18,8 @@ class Store {
   @observable errors = {}
   @observable data = {
     email: '',
-    password: ''
+    password: '',
+    amount: ''
   }
 
   @action login = () => {
@@ -30,7 +31,7 @@ class Store {
     authAPI.login({login, password})
       .then(({token}) => {
         const {email} = content(token);
-        
+
         this.getUser(email, token);
         this.setItem(token);
         this.isAuth = true;
