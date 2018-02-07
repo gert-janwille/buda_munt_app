@@ -7,6 +7,7 @@ import ScanScreen from '../screens/ScanScreen';
 
 import Login from '../screens/Login';
 import Profile from '../screens/Profile';
+import Transactions from '../screens/Transactions';
 
 import List from '../screens/List';
 import NewItem from '../screens/NewItem';
@@ -28,6 +29,26 @@ export const ScanScreens = StackNavigator(
       screen: ScanScreen,
       navigationOptions: {
         title: "Scan",
+        headerStyle: { backgroundColor: '#68AFA4' },
+        headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
+      }
+    }
+  }
+);
+
+export const ProfileScreens = StackNavigator(
+  {
+    Profiel: {
+      screen: Profile,
+      navigationOptions: {
+        title: "Profiel",
+        header: null
+      },
+    },
+    Transactions: {
+      screen: Transactions,
+      navigationOptions: {
+        title: "Transacties",
         headerStyle: { backgroundColor: '#68AFA4' },
         headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
       }
@@ -71,7 +92,7 @@ export const ListNavigation = StackNavigator(
 export const AppScreens = TabNavigator(
   {
     Profiel: {
-      screen: Profile,
+      screen: ProfileScreens,
       navigationOptions: ({navigation}) => ({
         title: "Profiel",
         tabBarIcon: ({tintColor}) => (

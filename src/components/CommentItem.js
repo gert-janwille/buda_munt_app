@@ -4,7 +4,7 @@ import timeConverter from '../lib/timeConverter';
 
 import detailStyle from '../styles/detailStyle';
 
-const ActivityItem = ({date, username, description}) => {
+const CommentItem = ({date, username, description}) => {
 
   return (
     <View style={detailStyle.cardItem}>
@@ -21,4 +21,4 @@ const ActivityItem = ({date, username, description}) => {
   );
 }
 
-export default ActivityItem
+export default CommentItem

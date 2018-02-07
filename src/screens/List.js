@@ -11,7 +11,7 @@ import listStyle from '../styles/listStyle';
 const List = ({navigation, activities, promo}) => {
 
   const handleFilter = e => console.log(e);
-  const handleGoToPromo = e => navigation.navigate('Home');
+  const handleGoToPromo = e => navigation.navigate(`Detail`, {id: promo._id, title: promo.title});
   const handleAddItem = e => navigation.navigate('NewItem');
   const handleDoNothing = () => {}
 

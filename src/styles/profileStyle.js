@@ -53,5 +53,22 @@ export default StyleSheet.create({
   },
   largeMargin: {
     marginTop: 25,
+  },
+  containerTrans: {
+    margin: 20,
+  },
+  cardTransaction: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    marginBottom: 15,
+    height: 35,
+    borderRadius: 10,
+    alignItems: 'center',
+    paddingLeft: 10,
+    paddingRight: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: .3,
+    shadowRadius: 5,
   }
 });

@@ -6,17 +6,12 @@ import {View, Text, TextInput, Button, Image} from 'react-native';
 import profileStyle from '../styles/profileStyle'
 import mainStyle from '../styles/mainStyle'
 
-const Profile = ({logout, user, account}) => {
+const Profile = ({navigation, logout, user, account}) => {
 
   const handleLogout = e => logout();
 
-  const handleNavigateTransactions = e => {
-    console.log("hello world");
-  }
-
-  const handleNavigateOpenList = e => {
-    console.log("hello world");
-  }
+  const handleNavigateTransactions = e => navigation.navigate('Transactions');
+  const handleNavigateOpenList = e => navigation.navigate('List');
 
   return (
     <View style={profileStyle.constainer}>

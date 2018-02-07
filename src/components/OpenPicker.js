@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Picker} from 'react-native';
 
 
-const ActivityItem = ({handleSetCategorie}) => {
+const openPicker = ({handleSetCategorie}) => {
 
   return (
     <Picker
@@ -15,4 +15,4 @@ const ActivityItem = ({handleSetCategorie}) => {
   );
 }
 
-export default ActivityItem
+export default openPicker

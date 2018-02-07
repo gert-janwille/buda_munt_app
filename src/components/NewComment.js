@@ -8,7 +8,7 @@ import timeConverter from '../lib/timeConverter';
 import detailStyle from '../styles/detailStyle';
 import mainStyle from '../styles/mainStyle';
 
-const ActivityItem = ({id, user, data, changeInput, insertNewComment, errors, setNewComment}) => {
+const NewComment = ({id, user, data, changeInput, insertNewComment, errors, setNewComment}) => {
 
   const handleSetComment = e => changeInput('comment', e);
   const handlePost = e => insertNewComment(user, id);
@@ -50,5 +50,5 @@ export default inject(
     setNewComment: store.setNewComment
   })
 )(
-  observer(ActivityItem)
+  observer(NewComment)
 );
