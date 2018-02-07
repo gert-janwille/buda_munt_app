@@ -2,23 +2,18 @@ import React from 'react';
 import {View, Text, Image} from 'react-native';
 import {TabNavigator, StackNavigator} from 'react-navigation';
 
-import HomeScreen from '../screens/HomeScreen'
-import ScanScreen from '../screens/ScanScreen'
-import Login from '../screens/Login'
+import HomeScreen from '../screens/HomeScreen';
+import ScanScreen from '../screens/ScanScreen';
+
+import Login from '../screens/Login';
+import Profile from '../screens/Profile';
+
+import List from '../screens/List';
+import NewItem from '../screens/NewItem';
+import Detail from '../screens/Detail'
 
 import mainStyle from '../styles/mainStyle'
 
-const ProfileScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Profile Screen</Text>
-  </View>
-);
-
-const otherScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Other Screen</Text>
-  </View>
-);
 
 export const ScanScreens = StackNavigator(
   {
@@ -33,8 +28,41 @@ export const ScanScreens = StackNavigator(
       screen: ScanScreen,
       navigationOptions: {
         title: "Scan",
-        headerStyle: { backgroundColor: '#72B7AD' },
-        headerTitleStyle: { color: 'white' },
+        headerStyle: { backgroundColor: '#68AFA4' },
+        headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
+      }
+    }
+  }
+);
+
+export const ListNavigation = StackNavigator(
+  {
+    List: {
+      screen: List,
+      navigationOptions: {
+        title: "List",
+        header: null
+      },
+    },
+
+    NewItem: {
+      screen: NewItem,
+      navigationOptions: {
+        title: "Nieuwe Activiteit",
+        headerStyle: { backgroundColor: '#68AFA4' },
+        headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
+      }
+    },
+
+    Detail: {
+      screen: Detail,
+      navigationOptions: ({navigation}) => {
+        const {title} = navigation.state.params;
+        return ({
+          title: title,
+          headerStyle: { backgroundColor: '#68AFA4' },
+          headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
+        })
       }
     }
   }
@@ -43,7 +71,7 @@ export const ScanScreens = StackNavigator(
 export const AppScreens = TabNavigator(
   {
     Profiel: {
-      screen: ProfileScreen,
+      screen: Profile,
       navigationOptions: ({navigation}) => ({
         title: "Profiel",
         tabBarIcon: ({tintColor}) => (
@@ -64,7 +92,7 @@ export const AppScreens = TabNavigator(
     },
 
     Lijst: {
-      screen: otherScreen,
+      screen: ListNavigation,
       navigationOptions: ({navigation}) => ({
         title: "Lijst",
         tabBarIcon: ({tintColor}) => (
@@ -74,7 +102,9 @@ export const AppScreens = TabNavigator(
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Lijst',
+    animationEnabled: true,
+    swipeEnabled: true,
     tabBarOptions: {
       activeTintColor: '#6FB7AD',
       inactiveTintColor: 'lightgray',

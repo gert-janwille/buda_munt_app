@@ -3,8 +3,10 @@ import { AsyncStorage } from "react-native";
 
 import {isEmpty} from 'lodash';
 import {content} from '../lib/auth/token';
+
 import authAPI from '../lib/api/auth';
 import usersAPI from '../lib/api/users';
+import activitiesAPI from '../lib/api/activities';
 
 class Store {
   @observable isAuth = false;
@@ -12,6 +14,10 @@ class Store {
 
   @observable user = {};
   @observable account = {};
+
+  @observable activities = [];
+  @observable promo = {};
+  @observable detailObject = {};
 
   @observable name = `BudaMunt`
 
@@ -22,6 +28,22 @@ class Store {
     amount: ''
   }
 
+  init = () => {
+    if (this.token === undefined) this.hasToken();
+
+    activitiesAPI.read()
+      .then(activities => {
+        activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+        this.activities = activities
+        this.promo = activities[Math.floor(Math.random() * activities.length)];
+      })
+      .catch(e => console.log(e));
+  }
+
+  constructor(){
+    this.init();
+  }
+
   @action login = () => {
     const errors = this.validate(this.data);
     if (!isEmpty(errors)) this.errors = errors
@@ -30,6 +52,7 @@ class Store {
 
     authAPI.login({login, password})
       .then(({token}) => {
+        if (!token) return this.errors.password = 'Verkeerd email/wachtwoord';
         const {email} = content(token);
 
         this.getUser(email, token);
@@ -42,18 +65,25 @@ class Store {
   @action hasToken = () => {
       AsyncStorage.getItem('token')
         .then(token => {
+          if (!token) return this.token = '';
           const {email} = content(token);
           this.getUser(email, token);
 
           this.token = token
           this.isAuth = token !== null ? true : false;
         })
-        .catch(err => reject(err));
+        .catch(err => console.log(err));
   }
 
   @action logout = () => {
     this.removeItem();
     this.isAuth = false;
+  }
+
+  @action getDetail = id => {
+    this.detailObject = {};
+    if (isEmpty(this.activities)) return;
+    this.detailObject = this.activities.filter(c => c._id.toLowerCase() === id)[0];
   }
 
   @action setItem = (t) => AsyncStorage.setItem('token', t);

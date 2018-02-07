@@ -1,5 +1,4 @@
-const url = `budamunt.herokuapp.com/api/activities`;
-import fetch from 'isomorphic-fetch';
+const url = `https://budamunt.herokuapp.com/api/activities`;
 
 import buildBody from '../buildBody';
 import token from '../auth/token';

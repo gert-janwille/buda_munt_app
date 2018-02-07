@@ -2,33 +2,34 @@ import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react/native'
 
 import {View, Text, TouchableHighlight, Image, StatusBar} from 'react-native';
-import homeStyle from '../styles/homeStyle'
+
+import homeStyle from '../styles/homeStyle';
+import formStyle from '../styles/formStyle';
 
 const HomeScreen = ({navigation, user}) => {
-  console.log(user);
 
-  const handleOpenScan = e => {
-    console.log('open scan');
-    navigation.navigate("Scan")
-  }
+  const handleOpenScan = e => navigation.navigate("Scan")
+
   return (
     <View style={homeStyle.container}>
       <StatusBar barStyle="light-content"/>
 
       <View style={homeStyle.qrContainer}>
+
+        <View style={homeStyle.qrContainerInner}>
+          <Text style={homeStyle.qrContainerText}>Hou deze QR-code voor een ander toestel</Text>
+          <Image style={homeStyle.qr} source={{uri: user.qr}}/>
+        </View>
+
         <View style={homeStyle.openScanContainer}>
           <TouchableHighlight onPress={handleOpenScan} style={homeStyle.openButton}>
-            <Text style={homeStyle.openButtonText} underlayColor='white' activeOpacity='1'>Scan zelf een QR-Code</Text>
+            <Image style={homeStyle.camButton} source={require('../assets/img/scan.png')} />
           </TouchableHighlight>
         </View>
 
-        <View style={homeStyle.qrContainerInner}>
-          <Image style={homeStyle.qr} source={{uri: user.qr}}/>
-          <Text style={homeStyle.qrContainerText}>Hou deze QR-code voor een ander toestel</Text>
-        </View>
+      </View>
 
-        </View>
-
+      <Image style={homeStyle.image} source={require('../assets/img/main-buda-community.png')}/>
 
     </View>
   );

@@ -2,9 +2,14 @@ import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: '#6FB7AD',
+    backgroundColor: '#68AFA4',
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: .8,
+    shadowRadius: 2,
+    elevation: 1,
   },
 
   qr: {
@@ -31,15 +36,16 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   qrContainerInner:{
+    marginTop: 20,
     height: Dimensions.get('window').width-100,
   },
   qrContainerText: {
     color: 'white',
-    marginTop: 10,
+    marginBottom: 10,
     fontWeight: '200',
   },
   openScanContainer: {
-    marginBottom: 20,
+    marginTop: 20,
     alignItems: 'center',
     width: Dimensions.get('window').width-100,
   },
@@ -47,16 +53,27 @@ export default StyleSheet.create({
     color:'#fff',
     textAlign:'center',
   },
+  image:{
+    marginTop: -50,
+    width: Dimensions.get('window').width,
+    height: 160,
+    resizeMode: 'stretch',
+    zIndex: -10,
+  },
   openButton: {
-    marginRight:40,
-    marginLeft:40,
-    marginTop:10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1,
+    backgroundColor: 'white',
     paddingTop:20,
     paddingBottom:20,
-    borderRadius:10,
-    borderWidth: 1,
-    borderColor: '#fff',
-    width: Dimensions.get('window').width-100,
+    borderRadius:100,
+    width: 80,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
 
   },
 
@@ -88,6 +105,10 @@ export default StyleSheet.create({
     height: 80,
     color: 'white',
     fontSize: 40,
+  },
+  camButton: {
+    width:50,
+    height:50,
   },
   camera: {
    flex: 0,
