@@ -14,7 +14,7 @@ export default {
       .catch(er => console.error(er));
   },
 
-  update: (data, action, id) => {
+  update: (data, action, id, token) => {
     const method = `PUT`;
     const body = buildBody(data, [`comment`, `doneby`]);
     const headers = new Headers({

@@ -4,17 +4,18 @@ import {isEmpty} from 'lodash';
 
 import {View, Button, Text, TouchableHighlight, TouchableWithoutFeedback, Image, StatusBar, ScrollView} from 'react-native';
 
-import CommentItem from '../components/CommentItem'
+import CommentItem from '../components/CommentItem';
+import NewComment from '../components/NewComment';
 
 import mainStyle from '../styles/mainStyle';
 import detailStyle from '../styles/detailStyle';
 
-const Detail = ({navigation, getDetail, detailObject}) => {
+const Detail = ({navigation, getDetail, detailObject, newComment, setNewComment}) => {
   const {id} = navigation.state.params;
   if (isEmpty(detailObject) || detailObject.id !== id) getDetail(id);
   const {title, username, price, description, type, comments} = detailObject;
 
-  const handleNewComment = e => console.log("hello world");
+  const handleNewComment = e => setNewComment(true);
 
   return (
     <View style={detailStyle.container}>
@@ -35,7 +36,8 @@ const Detail = ({navigation, getDetail, detailObject}) => {
             <Text style={{color: 'blue', textDecorationLine: 'underline'}}>Plaats nieuwe reactie</Text>
           </View>
         </TouchableWithoutFeedback>
-        {!isEmpty(comments) ? comments.map(c => <CommentItem key={c.date} {...c}/>) : null}
+        {newComment ? <NewComment id={detailObject._id} /> : null}
+        {!isEmpty(comments) ? comments.map(c => <CommentItem key={c.date} {...c} />) : null}
       </ScrollView>
 
 
@@ -46,7 +48,9 @@ const Detail = ({navigation, getDetail, detailObject}) => {
 export default inject(
   ({store}) => ({
     getDetail: store.getDetail,
-    detailObject: store.detailObject
+    detailObject: store.detailObject,
+    newComment: store.newComment,
+    setNewComment: store.setNewComment
   })
 )(
   observer(Detail)

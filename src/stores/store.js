@@ -20,9 +20,10 @@ class Store {
   @observable promo = {};
   @observable detailObject = {};
 
-  @observable name = `BudaMunt`
+  @observable name = `BudaMunt`;
+  @observable newComment = false;
 
-  @observable errors = {}
+  @observable errors = {};
   @observable data = {
     email: '',
     password: '',
@@ -32,7 +33,8 @@ class Store {
     title: '',
     categorie: '',
     description: '',
-  }
+    comment: '',
+  };
 
   init = () => {
     if (this.token === undefined) this.hasToken();
@@ -113,6 +115,28 @@ class Store {
       .then(()=> navigation.navigate('List'));
   }
 
+  @action insertNewComment = (user, id) => {
+    const {comment} = this.data;
+    if (comment.trim() === '') return this.errors = {comment: 'Je gaf geen bericht in.'};
+
+    data = {
+      description: comment,
+      username: user.username,
+      account: user.account,
+      date: Date.now(),
+    };
+
+    activitiesAPI.update({comment: String(JSON.stringify(data))}, `comment`, id, this.token)
+      .then(a => {
+        this.setNewComment(false);
+        console.log(a);
+        a.comments = a.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+        this.activities.map(c => (c._id === a._id) ? c.comments = a.comments : null);
+      })
+      .then(()=> this.comment = '');
+  }
+
+  @action setNewComment = bool => this.newComment = bool;
   @action setType = type => this.data.type = type;
   @action setItem = (t) => AsyncStorage.setItem('token', t);
   @action removeItem = () => AsyncStorage.removeItem('token');
