@@ -28,5 +28,9 @@ export default StyleSheet.create({
     height: 40,
     marginTop: 10,
   },
+  error: {
+    color: 'red',
+    fontSize: 10,
+  }
 
 });

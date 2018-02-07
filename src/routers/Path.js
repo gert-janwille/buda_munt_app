@@ -40,7 +40,7 @@ export const ListNavigation = StackNavigator(
     List: {
       screen: List,
       navigationOptions: {
-        title: "List",
+        title: "Lijst",
         header: null
       },
     },
@@ -102,7 +102,7 @@ export const AppScreens = TabNavigator(
     }
   },
   {
-    initialRouteName: 'Lijst',
+    initialRouteName: 'Home',
     animationEnabled: true,
     swipeEnabled: true,
     tabBarOptions: {

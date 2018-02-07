@@ -10,6 +10,7 @@ import activitiesAPI from '../lib/api/activities';
 
 class Store {
   @observable isAuth = false;
+  @observable openPicker = false;
   @observable token = undefined;
 
   @observable user = {};
@@ -25,7 +26,12 @@ class Store {
   @observable data = {
     email: '',
     password: '',
-    amount: ''
+    amount: '',
+    type: 'R',
+    price: '',
+    title: '',
+    categorie: '',
+    description: '',
   }
 
   init = () => {
@@ -86,10 +92,33 @@ class Store {
     this.detailObject = this.activities.filter(c => c._id.toLowerCase() === id)[0];
   }
 
+  @action submitActivity = navigation => {
+    const {type, title, price, categorie, description} = this.data;
+    const data = {type, title, price, categorie, description};
+    const errors = this.validate(data);
+    console.log(errors);
+    if (!isEmpty(errors)) return this.errors = errors
+
+    this.errors = {};
+
+    activitiesAPI.insert(data, this.token)
+      .then(a => this.activities.splice(0, 0, a))
+      .then(()=> {
+        this.type = '',
+        this.title = '',
+        this.price = '',
+        this.categorie = 'R',
+        this.description = ''
+      })
+      .then(()=> navigation.navigate('List'));
+  }
+
+  @action setType = type => this.data.type = type;
   @action setItem = (t) => AsyncStorage.setItem('token', t);
   @action removeItem = () => AsyncStorage.removeItem('token');
   @action changeInput = (key, value) => this.data[key] = value;
   @action setname = name => this.name = name.data
+  @action setOpenPicker = () => this.openPicker = !this.openPicker;
 
   getUser = (email, token) => {
     usersAPI.read(email, token)
