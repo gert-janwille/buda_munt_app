@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: {
@@ -11,7 +12,12 @@ export default StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-
+  scanContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#68AFA4',
+    flex: 1,
+  },
   qr: {
     marginTop:10,
     width: Dimensions.get('window').width-100,
@@ -22,9 +28,7 @@ export default StyleSheet.create({
 
   amountContainer: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height-200,
-    marginTop: 25,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center'
   },
 
@@ -81,7 +85,6 @@ export default StyleSheet.create({
     marginTop: 50,
     marginBottom: 20,
     width: Dimensions.get('window').width-100,
-    backgroundColor: 'red',
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -105,17 +108,44 @@ export default StyleSheet.create({
     height: 80,
     color: 'white',
     fontSize: 40,
+    textAlign: 'center',
   },
   camButton: {
     width:50,
     height:50,
   },
   camera: {
-   flex: 0,
-   alignItems: 'center',
-   justifyContent: 'center',
-   backgroundColor: 'transparent',
-   height: Dimensions.get('window').width,
-   width: Dimensions.get('window').width,
+    marginTop: 5,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    height: Dimensions.get('window').width - 120,
+    width: Dimensions.get('window').width - 120,
  },
+ pinOverlay: {
+   zIndex: 100,
+   flex: 1,
+   alignItems: 'center',
+   justifyContent: 'flex-start',
+   position: 'absolute',
+   left: 0,
+   top: 0,
+   backgroundColor: '#fff',
+   width: width,
+   height: height,
+   paddingTop: 50,
+   paddingLeft: 10,
+   paddingRight: 10,
+ },
+ pin: {
+   width: width - 40,
+   borderColor: '#d6d7da',
+   paddingLeft: 10,
+   borderWidth: 2,
+   height: 100,
+   fontSize: 50,
+   textAlign: 'center',
+   marginBottom: 50,
+ }
 });

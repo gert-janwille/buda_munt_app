@@ -33,11 +33,10 @@ export default StyleSheet.create({
 
   input: {
     flex: 2,
-    height: 30,
-    borderRadius: 4,
-    borderWidth: 0.5,
     borderColor: '#d6d7da',
-    padding: 5,
+    paddingLeft: 10,
+    borderWidth: 2,
+    height: 50,
   },
 
   label: {

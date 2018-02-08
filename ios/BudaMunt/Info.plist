@@ -40,6 +40,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera is been used to scan the QR Codes</string>
 	<key>CFBundleDisplayName</key>
 	<string>BudaMunt</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>

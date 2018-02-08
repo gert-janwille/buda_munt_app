@@ -7,6 +7,7 @@ import {content} from '../lib/auth/token';
 import authAPI from '../lib/api/auth';
 import usersAPI from '../lib/api/users';
 import activitiesAPI from '../lib/api/activities';
+import transactionsAPI from '../lib/api/transactions';
 
 class Store {
   @observable isAuth = false;
@@ -22,6 +23,8 @@ class Store {
 
   @observable name = `BudaMunt`;
   @observable newComment = false;
+  @observable setOverlay = false;
+  @observable askPin = false;
 
   @observable errors = {};
   @observable data = {
@@ -34,6 +37,8 @@ class Store {
     categorie: '',
     description: '',
     comment: '',
+    hash: '',
+    pin: ''
   };
 
   init = () => {
@@ -53,21 +58,26 @@ class Store {
   }
 
   @action login = () => {
-    const errors = this.validate(this.data);
-    if (!isEmpty(errors)) this.errors = errors
+    const {email, password} = this.data;
 
-    const {email: login, password} = this.data;
+    const errors = this.validate({email, password});
+    if (!isEmpty(errors)) return this.errors = errors
 
-    authAPI.login({login, password})
+    this.setOverlay = true;
+    authAPI.login({login: email, password})
       .then(({token}) => {
-        if (!token) return this.errors.password = 'Verkeerd email/wachtwoord';
+        if (!token) {
+          this.setOverlay = false;
+          return this.errors = {password: 'Verkeerd email/wachtwoord'};
+        }
         const {email} = content(token);
 
         this.getUser(email, token);
         this.setItem(token);
         this.isAuth = true;
+        this.setOverlay = false;
       })
-      .catch(e => this.errors.password = 'Verkeerd email/wachtwoord');
+      .catch(e => this.errors = {password: e});
   }
 
   @action hasToken = () => {
@@ -98,7 +108,6 @@ class Store {
     const {type, title, price, categorie, description} = this.data;
     const data = {type, title, price, categorie, description};
     const errors = this.validate(data);
-    console.log(errors);
     if (!isEmpty(errors)) return this.errors = errors
 
     this.errors = {};
@@ -129,11 +138,39 @@ class Store {
     activitiesAPI.update({comment: String(JSON.stringify(data))}, `comment`, id, this.token)
       .then(a => {
         this.setNewComment(false);
-        console.log(a);
         a.comments = a.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
         this.activities.map(c => (c._id === a._id) ? c.comments = a.comments : null);
       })
       .then(()=> this.comment = '');
+  }
+
+  @action getCoins = navigation => {
+    const {pin, hash, amount} = this.data;
+    const errors = this.validate({pin, hash});
+    if (!isEmpty(errors)) return this.errors = errors;
+
+    transactionsAPI.get({pin, hash}, amount, this.token)
+      .then(acc => {
+        if (!acc.transactions) return this.errors = {pin: 'Er is een verkeerde pin ingevoerd'};
+        this.account = acc;
+
+        this.data.pin = '';
+        this.data.amount = '';
+        this.data.hash = '';
+        this.askPin = false;
+
+        navigation.navigate('Home');
+        navigation.navigate('Profiel');
+      })
+      .catch(e => console.log(e));
+  }
+
+  @action setHash = data => {
+    const {hash, amount} = this.data;
+    if (amount.trim() === '') return this.errors = {amount: 'Geef een bedrag in.'}
+    if (hash !== '') return;
+    this.data.hash = data;
+    this.askPin = true;
   }
 
   @action setNewComment = bool => this.newComment = bool;

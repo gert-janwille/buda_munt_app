@@ -1,5 +1,5 @@
 const url = `https://budamunt.herokuapp.com/api/auth`;
-const audience = window.navigator.platform;
+const audience = 'app'
 import buildBody from '../buildBody';
 
 export default {

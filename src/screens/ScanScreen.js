@@ -1,16 +1,21 @@
 import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react/native'
-
+import Camera from 'react-native-camera'
+import {isEmpty} from 'lodash'
 import {View, Text, TouchableHighlight, Image, StatusBar, TextInput} from 'react-native';
+
+import PinScreen from '../components/PinScreen'
+
 import homeStyle from '../styles/homeStyle'
+import mainStyle from '../styles/mainStyle'
 
-const HomeScreen = ({user, data, changeInput}) => {
-  console.log(user);
+const ScanScreen = ({navigation, data, changeInput, setHash, askPin, errors}) => {
 
+  const handleQRScan = ({data}) => setHash(data);
   const handleChangeAmount = e =>changeInput('amount', e);
 
   return (
-    <View style={homeStyle.container}>
+    <View style={homeStyle.scanContainer}>
       <StatusBar barStyle="light-content"/>
 
       <View style={homeStyle.amountContainer}>
@@ -21,15 +26,20 @@ const HomeScreen = ({user, data, changeInput}) => {
             <TextInput onChangeText={handleChangeAmount} value={data.amount} style={homeStyle.amount} keyboardType='numeric' keyboardAppearance='dark'></TextInput>
             <Text style={homeStyle.bda}> BDA</Text>
           </View>
+          <Text style={mainStyle.error}>{!isEmpty(errors) ? errors.amount : ''}</Text>
 
         </View>
+      </View>
 
-        <View style={homeStyle.qrContainerInner}>
-          <Image style={homeStyle.qr} source={{uri: user.qr}}/>
-        </View>
+      <View style={homeStyle.qrContainerInner}>
+        <Camera
+          style={[homeStyle.camera]}
+          onBarCodeRead={handleQRScan}
+          type={'back'} >
+        </Camera>
+      </View>
 
-        </View>
-
+        {askPin ? <PinScreen navigation={navigation}/> : null}
 
     </View>
   );
@@ -37,10 +47,12 @@ const HomeScreen = ({user, data, changeInput}) => {
 
 export default inject(
   ({store}) => ({
-    user: store.user,
     data: store.data,
-    changeInput: store.changeInput
+    changeInput: store.changeInput,
+    setHash: store.setHash,
+    askPin: store.askPin,
+    errors: store.errors
   })
 )(
-  observer(HomeScreen)
+  observer(ScanScreen)
 );

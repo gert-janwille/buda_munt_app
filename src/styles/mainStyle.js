@@ -1,4 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+const { width, height } = Dimensions.get('window');
+
 
 export default StyleSheet.create({
   header: {
@@ -31,6 +33,20 @@ export default StyleSheet.create({
   error: {
     color: 'red',
     fontSize: 10,
+  },
+  overlay: {
+    zIndex: 100,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.8,
+    backgroundColor: '#000',
+    width: width,
+    height: height,
   }
 
 });

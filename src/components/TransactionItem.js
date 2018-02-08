@@ -10,5 +10,4 @@ const TransactionItem = ({text}) => (
     </View>
 );
 
-
 export default TransactionItem
