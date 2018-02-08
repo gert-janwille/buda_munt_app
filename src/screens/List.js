@@ -4,13 +4,14 @@ import {inject, observer} from 'mobx-react/native'
 import {View, Button, Text, TouchableHighlight, TouchableWithoutFeedback, Image, StatusBar, ScrollView} from 'react-native';
 
 import ActivityItem from '../components/ActivityItem'
+import Filter from '../components/Filter'
 
 import mainStyle from '../styles/mainStyle';
 import listStyle from '../styles/listStyle';
 
-const List = ({navigation, activities, promo}) => {
+const List = ({navigation, activities, promo, openFilter, setOpenFilter}) => {
 
-  const handleFilter = e => console.log(e);
+  const handleFilter = e => setOpenFilter(true);
   const handleGoToPromo = e => navigation.navigate(`Detail`, {id: promo._id, title: promo.title});
   const handleAddItem = e => navigation.navigate('NewItem');
   const handleDoNothing = () => {}
@@ -51,6 +52,8 @@ const List = ({navigation, activities, promo}) => {
 
       </ScrollView>
 
+      {openFilter ? <Filter /> : null}
+
     </View>
   );
 }
@@ -58,7 +61,9 @@ const List = ({navigation, activities, promo}) => {
 export default inject(
   ({store}) => ({
     promo: store.promo,
-    activities: store.activities
+    activities: store.activities,
+    openFilter: store.openFilter,
+    setOpenFilter: store.setOpenFilter
   })
 )(
   observer(List)

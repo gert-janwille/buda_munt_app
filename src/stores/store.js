@@ -1,5 +1,5 @@
 import {observable, action} from 'mobx';
-import { AsyncStorage } from "react-native";
+import {AsyncStorage} from "react-native";
 
 import {isEmpty} from 'lodash';
 import {content} from '../lib/auth/token';
@@ -18,13 +18,16 @@ class Store {
   @observable account = {};
 
   @observable activities = [];
+  @observable allActivities = [];
   @observable promo = {};
   @observable detailObject = {};
 
   @observable name = `BudaMunt`;
+
   @observable newComment = false;
   @observable setOverlay = false;
   @observable askPin = false;
+  @observable openFilter = false;
 
   @observable errors = {};
   @observable data = {
@@ -41,6 +44,11 @@ class Store {
     pin: ''
   };
 
+  @observable filterData = {
+    type:[],
+    categorie: ''
+  }
+
   init = () => {
     if (this.token === undefined) this.hasToken();
 
@@ -48,6 +56,7 @@ class Store {
       .then(activities => {
         activities.sort((a, b) => new Date(b.date) - new Date(a.date));
         this.activities = activities
+        this.allActivities = activities
         this.promo = activities[Math.floor(Math.random() * activities.length)];
       })
       .catch(e => console.log(e));
@@ -173,6 +182,22 @@ class Store {
     this.askPin = true;
   }
 
+  @action setFilterType = value => {
+    const {type} = this.filterData;
+
+    (type.indexOf(value) === -1)? this.filterData.type = [...type, value] : this.filterData.type.remove(value);
+    if (this.filterData.type.length >= 2 || this.filterData.type.length <= 0) return this.activities = this.allActivities
+    this.activities = this.allActivities.filter(obj => obj.type === this.filterData.type[0]);
+  }
+
+  @action changeFilterInput = (key, value) => {
+    this.filterData[key] = value;
+    if (value === 'kies' || value === '') return this.activities = this.allActivities
+    this.activities = this.allActivities.filter(obj => obj.categorie === value);
+  }
+
+
+  @action setOpenFilter = bool => this.openFilter = bool;
   @action setNewComment = bool => this.newComment = bool;
   @action setType = type => this.data.type = type;
   @action setItem = (t) => AsyncStorage.setItem('token', t);
@@ -197,6 +222,7 @@ class Store {
     }
     return error;
   }
+
 }
 
 const store = new Store();

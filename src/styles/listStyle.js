@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
+const {width, height} = Dimensions.get('window');
 
 export default StyleSheet.create({
   container : {
@@ -82,6 +83,29 @@ export default StyleSheet.create({
   },
   filterButton: {
     backgroundColor: '#F0F0F2',
+  },
+  filterCon: {
+    position: 'absolute',
+    height,
+    backgroundColor: 'rgba(0,0,0,.3)',
+    top: 0,
+    left: 0,
+    width: width,
+    marginTop: 80,
+  },
+  filterOverlay: {
+    padding: 20,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: .5,
+    shadowRadius: 3,
+    elevation: 1,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+  },
+  picker: {
+    marginTop: 20,
   }
 
 });
