@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "iphone7": "react-native run-ios --simulator='iPhone 7 Plus'",
+    "ipad": "react-native run-ios --simulator='iPad Pro (10.5-inch)'",
     "ios": "react-native run-ios",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"

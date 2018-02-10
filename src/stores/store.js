@@ -30,6 +30,13 @@ class Store {
   @observable askPin = false;
   @observable openFilter = false;
 
+  @observable dealerAmount = '';
+  @observable pinCode = '';
+  @observable dealerHash = '';
+  @observable dealerText = 'Welcome';
+  @observable pinDealer = false;
+  @observable dealerQR = false;
+
   @observable errors = {};
   @observable data = {
     email: '',
@@ -115,6 +122,8 @@ class Store {
         .then(token => {
           if (!token) return this.token = '';
 
+          if (this.isConnected) this.getUser(content(token).email, token);
+
           AsyncStorage.getItem('user')
             .then(user => {
               if (!user) if (!user) return this.getUser(content(token).email, token);
@@ -125,6 +134,8 @@ class Store {
 
                   this.user = JSON.parse(user);
                   this.account = JSON.parse(account);
+
+                  if (this.user.dealer) this.dealerText = `Welcome bij ${this.user.dealer}`;
 
                   this.token = token
                   this.isAuth = token !== null ? true : false;
@@ -194,7 +205,7 @@ class Store {
 
     transactionsAPI.get({pin, hash}, amount, this.token)
       .then(acc => {
-        if (!acc.transactions) return this.errors = {pin: 'Er is een verkeerde pin ingevoerd'};
+        if (!acc.transactions) return this.errors = {pin: acc.message};
         this.account = acc;
 
         this.data.pin = '';
@@ -230,7 +241,68 @@ class Store {
     this.activities = this.allActivities.filter(obj => obj.categorie === value);
   }
 
+  @action setDealerAmount = key => {
+    if (key === 'AC') return this.dealerAmount = '';
+    if (key === 'C') return this.dealerAmount = this.dealerAmount.slice(0, -1);
+    this.dealerAmount += key;
+  }
 
+  @action setPinCode = (key, navigation) => {
+    if (key === 'C') return this.pinCode = this.pinCode.slice(0, -1);
+    if (key === 'pay') return this.payDealer(navigation);
+    if (this.pinCode.length === 4) return;
+    this.pinCode += key;
+  }
+
+  @action payDealer = navigation => {
+    if (this.pinCode.length !== 4) return;
+
+    const pin = this.pinCode;
+    const hash = this.dealerHash;
+
+    transactionsAPI.get({pin, hash}, parseInt(this.dealerAmount), this.token)
+      .then(acc => {
+        if (!acc.transactions) return this.errors = {dealerPin: acc.message};
+        this.account = acc;
+
+        this.pinCode = '';
+        this.dealerAmount = '';
+        this.dealerHash = '';
+        this.setPinDealer(false);
+
+        this.dealerText = 'Bedankt voor uw aankoop';
+        setTimeout(() => this.dealerText = `Welcome bij ${this.user.dealer}`, 5000);
+      })
+      .catch(e => console.log(e));
+
+  }
+
+  @action closeDeal = () => {
+    this.pinCode = '';
+    this.dealerAmount = '';
+    this.dealerHash = '';
+    this.setPinDealer(false);
+    this.errors = {dealerPin: ''};
+
+    this.dealerText = 'Betaling geanuleerd';
+    setTimeout(() => this.dealerText = `Welcome bij ${this.user.dealer}`, 5000);
+  }
+
+  @action setAskPin = (bool, navigation) => {
+    if (!bool) {
+      this.data.pin = '';
+      this.data.amount = '';
+      this.data.hash = '';
+
+      navigation.navigate('Home');
+    }
+    this.askPin = bool;
+  }
+
+
+  @action showDealerQR = () => this.dealerQR = !this.dealerQR;
+  @action setPinDealer = bool => this.pinDealer = bool;
+  @action setDealerHash = data => this.dealerHash = data;
   @action setOpenFilter = bool => this.openFilter = bool;
   @action setNewComment = bool => this.newComment = bool;
   @action setType = type => this.data.type = type;

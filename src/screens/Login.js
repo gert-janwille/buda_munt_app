@@ -11,10 +11,7 @@ import Preloader from '../components/Preloader'
 
 const Login = ({navigation, changeInput, login, errors, setOverlay}) => {
 
-  const handleGoToRegister = e => {
-    navigation.navigate("Home")
-  }
-
+  const handleGoToRegister = e => navigation.navigate("Registreer");
   const handleLogin = e => login()
   const handleChangeEmail = e => changeInput('email', e);
   const handleChangePassword = e =>changeInput('password', e);

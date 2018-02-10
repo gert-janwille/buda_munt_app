@@ -147,5 +147,91 @@ export default StyleSheet.create({
    fontSize: 50,
    textAlign: 'center',
    marginBottom: 50,
- }
+ },
+ dealerContainer: {
+   // backgroundColor: 'red',
+   flexDirection: 'row',
+   height
+ },
+ dealerColumn: {
+   width: width/3,
+   backgroundColor: 'white',
+   justifyContent: 'space-between',
+ },
+ dealerCam: {
+   flex:1,
+ },
+ inputRow: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  welcomeText: {
+    fontFamily: 'Poppins',
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'grey',
+  },
+  touchPad: {
+    backgroundColor: '#6BAFA4',
+    bottom: 0,
+    height: height/2,
+  },
+  inputButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'white'
+  },
+  inputButtonText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  screenPad: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 80,
+    backgroundColor: 'white',
+  },
+  screenText: {
+    fontSize: 50,
+    fontWeight: 'bold',
+    color: '#6BAFA4',
+  },
+  overlayPin: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    width,
+    height,
+    backgroundColor: 'rgba(0,0,0,.8)'
+  },
+  pinContainer: {
+    width: width/2,
+  },
+  showQR: {
+    top: 50,
+    right:0,
+    zIndex: 1000,
+    position: 'absolute',
+    backgroundColor: '#6BAFA4',
+    width: 80,
+    height: 50,
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    paddingLeft: 20,
+  },
+  qrExpanded: {
+    width: width/3,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  qrDealer: {
+    marginTop:10,
+    width: 280,
+    height: 280,
+    resizeMode: 'contain',
+    borderRadius: 10,
+  },
 });

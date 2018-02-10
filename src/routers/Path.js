@@ -6,6 +6,8 @@ import HomeScreen from '../screens/HomeScreen';
 import ScanScreen from '../screens/ScanScreen';
 
 import Login from '../screens/Login';
+import Register from '../screens/Register';
+
 import Profile from '../screens/Profile';
 import Transactions from '../screens/Transactions';
 
@@ -15,6 +17,7 @@ import Detail from '../screens/Detail'
 
 import mainStyle from '../styles/mainStyle'
 
+let userParam = {};
 
 export const ScanScreens = StackNavigator(
   {
@@ -33,6 +36,9 @@ export const ScanScreens = StackNavigator(
         headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
       }
     }
+  },
+  {
+    initialRouteName: 'Home',
   }
 );
 
@@ -53,6 +59,9 @@ export const ProfileScreens = StackNavigator(
         headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
       }
     }
+  },
+  {
+      initialRouteName: 'Profiel',
   }
 );
 
@@ -86,6 +95,9 @@ export const ListNavigation = StackNavigator(
         })
       }
     }
+  },
+  {
+      initialRouteName: 'List',
   }
 );
 
@@ -104,6 +116,7 @@ export const AppScreens = TabNavigator(
     Home: {
       screen: ScanScreens,
       navigationOptions: ({navigation}) => ({
+        tabBarVisible: userParam.dealer ? false: true,
         title: "",
         showLabel: false,
         tabBarIcon: ({tintColor}) => (
@@ -133,17 +146,29 @@ export const AppScreens = TabNavigator(
   }
 );
 
-export const AuthScreens = StackNavigator({
-  Login: {
-    screen: Login,
-    navigationOptions: {
-      title: "Sign Up",
-      header: null
+export const AuthScreens = StackNavigator(
+  {
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        title: "Login",
+        header: null
+      },
+    },
+
+    Registreer: {
+      screen: Register,
+      navigationOptions: {
+        title: "Registreer",
+        headerStyle: { backgroundColor: '#68AFA4' },
+        headerTitleStyle: { color: 'white', fontFamily: 'Poppins' },
+      }
     }
   }
-});
+);
 
-export const createRootNavigator = (signedIn = false) => {
+export const createRootNavigator = (signedIn = false, user={}) => {
+  userParam = user
   return StackNavigator(
     {
       AppScreens: {
