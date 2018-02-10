@@ -1,5 +1,5 @@
 import {observable, action} from 'mobx';
-import {AsyncStorage} from "react-native";
+import {AsyncStorage, NetInfo} from "react-native";
 
 import {isEmpty} from 'lodash';
 import {content} from '../lib/auth/token';
@@ -10,6 +10,7 @@ import activitiesAPI from '../lib/api/activities';
 import transactionsAPI from '../lib/api/transactions';
 
 class Store {
+  @observable isConnected = false;
   @observable isAuth = false;
   @observable openPicker = false;
   @observable token = undefined;
@@ -50,16 +51,36 @@ class Store {
   }
 
   init = () => {
+    NetInfo.addEventListener('connectionChange', this.handleFirstConnectivityChange);
+
     if (this.token === undefined) this.hasToken();
 
-    activitiesAPI.read()
-      .then(activities => {
-        activities.sort((a, b) => new Date(b.date) - new Date(a.date));
-        this.activities = activities
-        this.allActivities = activities
-        this.promo = activities[Math.floor(Math.random() * activities.length)];
-      })
-      .catch(e => console.log(e));
+    if (this.isConnected) {
+      // Load from API
+      activitiesAPI.read()
+        .then(activities => {
+          activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+          this.activities = activities
+          this.allActivities = activities
+          this.promo = activities[Math.floor(Math.random() * activities.length)];
+
+          this.setItem('activities', JSON.stringify(activities));
+        })
+        .catch(e => console.log(e));
+
+    } else {
+        // Load from storage
+        AsyncStorage.getItem('activities')
+          .then(activities => {
+            if (!activities) return;
+            activities = JSON.parse(activities);
+            activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            this.activities = activities
+            this.allActivities = activities
+            this.promo = activities[Math.floor(Math.random() * activities.length)];
+          })
+    }
   }
 
   constructor(){
@@ -82,7 +103,7 @@ class Store {
         const {email} = content(token);
 
         this.getUser(email, token);
-        this.setItem(token);
+        this.setItem('token', token);
         this.isAuth = true;
         this.setOverlay = false;
       })
@@ -93,17 +114,30 @@ class Store {
       AsyncStorage.getItem('token')
         .then(token => {
           if (!token) return this.token = '';
-          const {email} = content(token);
-          this.getUser(email, token);
 
-          this.token = token
-          this.isAuth = token !== null ? true : false;
+          AsyncStorage.getItem('user')
+            .then(user => {
+              if (!user) if (!user) return this.getUser(content(token).email, token);
+
+              AsyncStorage.getItem('account')
+                .then(account => {
+                  if (!account) return this.getUser(content(token).email, token);
+
+                  this.user = JSON.parse(user);
+                  this.account = JSON.parse(account);
+
+                  this.token = token
+                  this.isAuth = token !== null ? true : false;
+                })
+            });
         })
         .catch(err => console.log(err));
   }
 
   @action logout = () => {
-    this.removeItem();
+    this.removeItem('token');
+    this.removeItem('user');
+    this.removeItem('account');
     this.isAuth = false;
   }
 
@@ -200,8 +234,8 @@ class Store {
   @action setOpenFilter = bool => this.openFilter = bool;
   @action setNewComment = bool => this.newComment = bool;
   @action setType = type => this.data.type = type;
-  @action setItem = (t) => AsyncStorage.setItem('token', t);
-  @action removeItem = () => AsyncStorage.removeItem('token');
+  @action setItem = (key, value) => AsyncStorage.setItem(key, value);
+  @action removeItem = key => AsyncStorage.removeItem(key);
   @action changeInput = (key, value) => this.data[key] = value;
   @action setname = name => this.name = name.data
   @action setOpenPicker = () => this.openPicker = !this.openPicker;
@@ -210,7 +244,10 @@ class Store {
     usersAPI.read(email, token)
       .then(({user, account}) => {
         this.user = user;
-        this.account = account
+        this.account = account;
+
+        this.setItem('user', JSON.stringify(user));
+        this.setItem('account', JSON.stringify(account));
       })
   }
 
@@ -221,6 +258,15 @@ class Store {
       if (data[key] === `` || data[key] === ` `) error[key] = `${errorStrings[Math.floor(Math.random() * errorStrings.length)]} ${key}`;
     }
     return error;
+  }
+
+  handleFirstConnectivityChange = ({type}) => {
+    if (type === 'none') return this.isConnected = false;
+
+    this.isConnected = true;
+    this.init();
+
+    NetInfo.removeEventListener('connectionChange', this.handleFirstConnectivityChange);
   }
 
 }

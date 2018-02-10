@@ -6,16 +6,15 @@ import {View, Button, Text, TouchableHighlight, TouchableWithoutFeedback, Image,
 
 import CommentItem from '../components/CommentItem';
 import NewComment from '../components/NewComment';
+import AddComment from '../components/AddComment';
 
 import mainStyle from '../styles/mainStyle';
 import detailStyle from '../styles/detailStyle';
 
-const Detail = ({navigation, getDetail, detailObject, newComment, setNewComment}) => {
+const Detail = ({navigation, getDetail, detailObject, newComment, setNewComment, isConnected}) => {
   const {id} = navigation.state.params;
   if (isEmpty(detailObject) || detailObject.id !== id) getDetail(id);
   const {title, username, price, description, type, comments} = detailObject;
-
-  const handleNewComment = e => setNewComment(true);
 
   return (
     <View style={detailStyle.container}>
@@ -31,11 +30,7 @@ const Detail = ({navigation, getDetail, detailObject, newComment, setNewComment}
       </View>
 
       <ScrollView style={detailStyle.scrollContainer}>
-        <TouchableWithoutFeedback onPress={handleNewComment}>
-          <View style={detailStyle.newComment}>
-            <Text style={{color: 'blue', textDecorationLine: 'underline'}}>Plaats nieuwe reactie</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        {isConnected ? <AddComment /> : null}
         {newComment ? <NewComment id={detailObject._id} /> : null}
         {!isEmpty(comments) ? comments.map(c => <CommentItem key={c.date} {...c} />) : null}
       </ScrollView>
@@ -50,7 +45,8 @@ export default inject(
     getDetail: store.getDetail,
     detailObject: store.detailObject,
     newComment: store.newComment,
-    setNewComment: store.setNewComment
+    setNewComment: store.setNewComment,
+    isConnected: store.isConnected
   })
 )(
   observer(Detail)

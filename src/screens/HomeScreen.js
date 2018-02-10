@@ -3,41 +3,36 @@ import {inject, observer} from 'mobx-react/native'
 
 import {View, Text, TouchableHighlight, Image, StatusBar} from 'react-native';
 
+import CamButton from '../components/CamButton';
+
 import homeStyle from '../styles/homeStyle';
 import formStyle from '../styles/formStyle';
 
-const HomeScreen = ({navigation, user}) => {
+const HomeScreen = ({navigation, user, isConnected}) => (
+  <View style={homeStyle.container}>
+    <StatusBar barStyle="light-content"/>
 
-  const handleOpenScan = e => navigation.navigate("Scan")
+    <View style={homeStyle.qrContainer}>
 
-  return (
-    <View style={homeStyle.container}>
-      <StatusBar barStyle="light-content"/>
-
-      <View style={homeStyle.qrContainer}>
-
-        <View style={homeStyle.qrContainerInner}>
-          <Text style={homeStyle.qrContainerText}>Hou deze QR-code voor een ander toestel</Text>
-          <Image style={homeStyle.qr} source={{uri: user.qr}}/>
-        </View>
-
-        <View style={homeStyle.openScanContainer}>
-          <TouchableHighlight onPress={handleOpenScan} style={homeStyle.openButton}>
-            <Image style={homeStyle.camButton} source={require('../assets/img/scan.png')} />
-          </TouchableHighlight>
-        </View>
-
+      <View style={homeStyle.qrContainerInner}>
+        <Text style={homeStyle.qrContainerText}>Hou deze QR-code voor een ander toestel</Text>
+        <Image style={homeStyle.qr} source={{uri: user.qr}}/>
       </View>
 
-      <Image style={homeStyle.image} source={require('../assets/img/main-buda-community.png')}/>
+      {isConnected ? <CamButton navigation={navigation}/> : null}
 
     </View>
-  );
-}
+
+    <Image style={homeStyle.image} source={require('../assets/img/main-buda-community.png')}/>
+
+  </View>
+);
+
 
 export default inject(
   ({store}) => ({
-    user: store.user
+    user: store.user,
+    isConnected: store.isConnected
   })
 )(
   observer(HomeScreen)

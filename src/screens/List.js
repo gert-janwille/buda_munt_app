@@ -9,11 +9,11 @@ import Filter from '../components/Filter'
 import mainStyle from '../styles/mainStyle';
 import listStyle from '../styles/listStyle';
 
-const List = ({navigation, activities, promo, openFilter, setOpenFilter}) => {
+const List = ({navigation, activities, promo, openFilter, setOpenFilter, isConnected}) => {
 
   const handleFilter = e => setOpenFilter(true);
   const handleGoToPromo = e => navigation.navigate(`Detail`, {id: promo._id, title: promo.title});
-  const handleAddItem = e => navigation.navigate('NewItem');
+  const handleAddItem = e => isConnected ? navigation.navigate('NewItem') : null;
   const handleDoNothing = () => {}
 
   return (
@@ -23,7 +23,7 @@ const List = ({navigation, activities, promo, openFilter, setOpenFilter}) => {
         <Button style={{flex: 1}} onPress={handleDoNothing} title=''></Button>
         <Text style={[mainStyle.headerHeading, {flex: 5, textAlign: 'center'}]}>Activiteiten</Text>
         <TouchableWithoutFeedback onPress={handleAddItem}>
-          <Image style={{width: 20, height: 20, resizeMode: 'contain', marginTop: 20, marginRight: 20}} source={require('../assets/img/add.png')} />
+          {isConnected? <Image style={{width: 20, height: 20, resizeMode: 'contain', marginTop: 20, marginRight: 20}} source={require('../assets/img/add.png')} /> : <View></View>}
         </TouchableWithoutFeedback>
       </View>
 
@@ -63,7 +63,8 @@ export default inject(
     promo: store.promo,
     activities: store.activities,
     openFilter: store.openFilter,
-    setOpenFilter: store.setOpenFilter
+    setOpenFilter: store.setOpenFilter,
+    isConnected: store.isConnected
   })
 )(
   observer(List)
