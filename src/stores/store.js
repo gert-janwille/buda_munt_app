@@ -1,7 +1,7 @@
 import {observable, action} from 'mobx';
 import {AsyncStorage, NetInfo} from "react-native";
 
-import {isEmpty} from 'lodash';
+import {isEmpty, pick} from 'lodash';
 import {content} from '../lib/auth/token';
 
 import authAPI from '../lib/api/auth';
@@ -37,6 +37,9 @@ class Store {
   @observable pinDealer = false;
   @observable dealerQR = false;
 
+  @observable type = '';
+  @observable step = 0
+
   @observable errors = {};
   @observable data = {
     email: '',
@@ -51,6 +54,23 @@ class Store {
     hash: '',
     pin: ''
   };
+
+  @observable registrationData = {
+    name: '',
+    firstName: '',
+    email: '',
+    phone: '',
+    password: '',
+    dealer: '',
+    description: '',
+    street: '',
+    houseNumber: '',
+    bus: ' ',
+    zip: '',
+    pin: '',
+    pinRepeat: '',
+    username: ''
+  }
 
   @observable filterData = {
     type:[],
@@ -92,6 +112,55 @@ class Store {
 
   constructor(){
     this.init();
+  }
+
+  @action validateAndGoNext = (step, arr) => {
+    const errors = this.validate(pick(this.registrationData, arr))
+    delete errors.bus;
+    if (!isEmpty(errors)) return this.errors = errors;
+    this.setStep(step);
+  }
+
+  @action submitUser = (navigation, arr) => {
+    const errors = this.validate(pick(this.registrationData, arr))
+
+    if (!isEmpty(errors)) return this.errors = errors;
+
+    const pinCorrect = this.validatePin(pick(this.registrationData, arr));
+    if (!pinCorrect) return this.errors = {pinRepeat: 'Pincodes komen niet overeen & moeten 4 characters bevatten.'}
+    this.setOverlay = true;
+
+    this.registrationData[`username`] = `${this.registrationData.firstName.toLowerCase()}${this.registrationData.name.toLowerCase()}`;
+
+    if (this.errors.file) delete this.registrationData[`file`];
+    if (this.errors.bus) delete this.registrationData[`bus`];
+
+    if (this.type === 'person') {
+      delete this.registrationData[`dealer`];
+      delete this.registrationData[`description`];
+    }
+
+    usersAPI.insert(this.registrationData)
+      .then(user => {
+        const {password, email} = this.registrationData
+
+        authAPI.login({login: email, password})
+          .then(({token}) => {
+            if (!token) {
+              this.setOverlay = false;
+              return this.errors = {pinRepeat: 'Verkeerd email/wachtwoord'};
+            }
+            const {email} = content(token);
+
+            this.getUser(email, token);
+            this.setItem('token', token);
+            this.isAuth = true;
+            this.setOverlay = false;
+
+            navigation.navigate('Home');
+          })
+      })
+      .catch(e => this.errors = {password: e});
   }
 
   @action login = () => {
@@ -309,8 +378,13 @@ class Store {
   @action setItem = (key, value) => AsyncStorage.setItem(key, value);
   @action removeItem = key => AsyncStorage.removeItem(key);
   @action changeInput = (key, value) => this.data[key] = value;
+  @action changeInputRegister = (key, value) => this.registrationData[key] = value;
   @action setname = name => this.name = name.data
   @action setOpenPicker = () => this.openPicker = !this.openPicker;
+  @action setStep = step => this.step = step;
+  @action setTypeDirect = value => this.type = value;
+
+  validatePin = ({pin, pinRepeat}) => pin === pinRepeat && pin.length === 4 ? true : false;
 
   getUser = (email, token) => {
     usersAPI.read(email, token)
