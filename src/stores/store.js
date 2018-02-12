@@ -466,9 +466,6 @@ class Store {
       break;
     }
   }
-
-
-
 }
 
 const store = new Store();
