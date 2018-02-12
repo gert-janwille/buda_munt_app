@@ -18,6 +18,7 @@ Make sure you have Node v6 or later installed. Xcode or Android Studio installat
 ```sh
 $ git clone https://github.com/gert-janwille/buda_munt_app.git
 $ cd buda_munt_app/
+$ yarn
 $ yarn run start || ios || test
 ```
 
@@ -38,6 +39,7 @@ Make sure you have Node v6 or later installed. Xcode or Android Studio installat
 ```sh
 $ git clone https://github.com/gert-janwille/buda_munt_app.git
 $ cd buda_munt_app/
+$ yarn
 $ yarn run start
 ```
 
@@ -51,6 +53,7 @@ Make sure you have Node v6 or later installed. Xcode or Android Studio installat
 ```sh
 $ git clone https://github.com/gert-janwille/buda_munt_app.git
 $ cd buda_munt_app/
+$ yarn
 $ yarn run ios
 ```
 
