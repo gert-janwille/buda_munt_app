@@ -1,12 +1,12 @@
 <div align="center">
   <a href="https://github.com/gert-janwille/buda_munt_app">
-    <img width="300"" src="https://raw.github.com/gert-janwille/buda_munt_app/master/docs/logo.png">
+    <img width="200"" src="https://raw.github.com/gert-janwille/buda_munt_app/master/docs/logo.png">
   </a>
   <br/>
   <br/>
   <br/>
   <p>
-    The Buda Coin app lets you pay in a local currency BDA(Buda Coin) everywhere on and near the Buda Island. Join us now on [Buda Coin](https://budamunt.herokuapp.com/)
+    The Buda Coin app lets you pay in a local currency BDA(Buda Coin) everywhere on and near the Buda Island. Join us now on a <a href="https://budamunt.herokuapp.com/">Buda Coin</a>
 </div>
 
 # Buda Coin App
@@ -24,8 +24,14 @@ $ yarn run start || ios || test
 ## Sections
 
 * [Getting Started](#getting-started)
-
+* [Running on Device](#running-the-app-on-device)
+* [Running in Simulator](#running-the-app-in-simulator)
+* [Build With](#Built-With)
 * [Contributing](#contributing)
+* [Versioning](#versioning)
+* [Authors](#authors)
+* [License](#license)
+* [Acknowledgments](#acknowledgments)
 
 ## Getting Started
 
