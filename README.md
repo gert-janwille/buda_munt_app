@@ -24,13 +24,9 @@ $ yarn run start || ios || test
 ## Sections
 
 * [Getting Started](#getting-started)
-* [Running on Device](#running-the-app-on-device)
-* [Running in Simulator](#running-the-app-in-simulator)
 * [Build With](#Built-With)
 * [Contributing](#contributing)
-* [Versioning](#versioning)
 * [Authors](#authors)
-* [License](#license)
 * [Acknowledgments](#acknowledgments)
 
 ## Getting Started
