@@ -1,13 +1,20 @@
 import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react/native'
-import {createRootNavigator} from "./Path";
+import {View} from 'react-native';
 
-import homeStyle from '../styles/homeStyle'
+import {createRootNavigator} from "./Path";
+import Notification from '../components/Notification';
 
 const Router = ({hasToken, token, isAuth, user}) => {
   if (token === undefined) hasToken();
   const Router = createRootNavigator(isAuth, user);
-  return <Router />
+
+  return (
+    <View style={{flex:1}}>
+      <Notification />
+      <Router />
+    </View>
+  )
 }
 
 export default inject(

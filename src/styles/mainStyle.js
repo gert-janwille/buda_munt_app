@@ -45,8 +45,32 @@ export default StyleSheet.create({
     bottom: 0,
     opacity: 0.8,
     backgroundColor: '#000',
-    width: width,
-    height: height,
+    width,
+    height,
+  },
+
+  notification: {
+    marginLeft: 5,
+    borderRadius: 10,
+    zIndex: 9999999,
+    backgroundColor: 'white',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: width - 10,
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: .3,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  notificationText: {
+    fontSize: 20,
+    color: '#6BAFA4',
+    fontFamily: 'Poppins',
   }
 
 });

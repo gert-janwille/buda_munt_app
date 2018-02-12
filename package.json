@@ -15,6 +15,7 @@
     ]
   },
   "dependencies": {
+    "buffer": "^5.0.8",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.5",
     "mobx": "^3.4.1",
@@ -24,7 +25,8 @@
     "react-native-camera": "^0.13.0",
     "react-native-key-value-store": "^1.0.1",
     "react-native-vector-icons": "^4.5.0",
-    "react-navigation": "^1.0.0-beta.27"
+    "react-navigation": "^1.0.0-beta.27",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "babel-jest": "22.1.0",

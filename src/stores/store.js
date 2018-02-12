@@ -1,5 +1,6 @@
 import {observable, action} from 'mobx';
 import {AsyncStorage, NetInfo} from "react-native";
+import SocketIOClient from 'socket.io-client';
 
 import {isEmpty, pick} from 'lodash';
 import {content} from '../lib/auth/token';
@@ -39,6 +40,7 @@ class Store {
 
   @observable type = '';
   @observable step = 0
+  @observable notificationStyle = {marginTop: -120}
 
   @observable errors = {};
   @observable data = {
@@ -83,6 +85,7 @@ class Store {
     if (this.token === undefined) this.hasToken();
 
     if (this.isConnected) {
+
       // Load from API
       activitiesAPI.read()
         .then(activities => {
@@ -277,6 +280,8 @@ class Store {
         if (!acc.transactions) return this.errors = {pin: acc.message};
         this.account = acc;
 
+        this.socket.emit(`message`, {to: hash, from: this.user.username, action: `transaction`});
+
         this.data.pin = '';
         this.data.amount = '';
         this.data.hash = '';
@@ -334,6 +339,8 @@ class Store {
         if (!acc.transactions) return this.errors = {dealerPin: acc.message};
         this.account = acc;
 
+        this.socket.emit(`message`, {to: hash, from: this.user.username, action: `transaction`});
+
         this.pinCode = '';
         this.dealerAmount = '';
         this.dealerHash = '';
@@ -368,6 +375,18 @@ class Store {
     this.askPin = bool;
   }
 
+  @action handleNotification = (direction, state) => {
+
+    switch (direction) {
+      case 'SWIPE_UP':
+        this.notificationStyle = {marginTop: -120}
+        console.log(state);
+        console.log('up');
+        break;
+    }
+
+  }
+
 
   @action showDealerQR = () => this.dealerQR = !this.dealerQR;
   @action setPinDealer = bool => this.pinDealer = bool;
@@ -384,6 +403,13 @@ class Store {
   @action setStep = step => this.step = step;
   @action setTypeDirect = value => this.type = value;
 
+
+  initSockets = account => {
+    this.socket = SocketIOClient(`https://budamunt.herokuapp.com/`, {query: `account=${account}`});
+    this.socket.on(`message`, e => this.handleWSmessage(e));
+    // this.socket.on(`init`, e => console.log(e));
+  }
+
   validatePin = ({pin, pinRepeat}) => pin === pinRepeat && pin.length === 4 ? true : false;
 
   getUser = (email, token) => {
@@ -394,6 +420,9 @@ class Store {
 
         this.setItem('user', JSON.stringify(user));
         this.setItem('account', JSON.stringify(account));
+
+        // Start sockets
+        this.initSockets(user.account);
       })
   }
 
@@ -414,6 +443,31 @@ class Store {
 
     NetInfo.removeEventListener('connectionChange', this.handleFirstConnectivityChange);
   }
+
+  updateUser = () => {
+    usersAPI.read(this.user.email, this.token)
+      .then(({user, account}) => {
+        this.user = user;
+        this.account = account;
+
+        this.notificationStyle = {marginTop: 5}
+        setTimeout(()=> this.notificationStyle = {marginTop: -120}, 5000)
+
+        this.setItem('user', JSON.stringify(user));
+        this.setItem('account', JSON.stringify(account));
+      })
+  }
+
+  handleWSmessage = data => {
+    const {action} = data;
+    switch (action) {
+    case `transaction`:
+      this.updateUser();
+      break;
+    }
+  }
+
+
 
 }
 
